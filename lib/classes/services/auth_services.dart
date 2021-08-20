@@ -5,29 +5,33 @@ import 'package:fioma/models/user.dart';
 import 'package:get/get.dart';
 
 abstract class AuthServices extends GetxService {
-  Future<User> getCurrentUser(Map<String, String> body);
-  Future<User> requestLogin(Map<String, String> body);
+  Future<dynamic> getCurrentUser(Map<String, String> body);
+  Future<dynamic> requestLogin(Map<String, String> body);
   Future<void> requestLogout(Map<String, String> body);
 }
 
 class AuthenticationService extends AuthServices {
   @override
-  Future<User> getCurrentUser(Map<String, String> body) async {
+  Future<dynamic> getCurrentUser(Map<String, String> body) async {
     String url = 'https://wearefioma.com/v1/api-authentication/session-check';
     String response = await Service.request(url, body);
 
     Map<String, dynamic> responseUser = jsonDecode(response);
     String status = responseUser['status'];
 
-    if (status == "failed" || status == "error") {
-      return null;
+    if (status == "failed") {
+      return AuthException(message: responseUser["status"]);
+    }
+
+    if (status == "error") {
+      return AuthException(message: responseUser["status"]);
     }
 
     return User.fromJson(responseUser['data']['user']);
   }
 
   @override
-  Future<User> requestLogin(Map<String, String> body) async {
+  Future<dynamic> requestLogin(Map<String, String> body) async {
     String url = 'https://wearefioma.com/v1/api-authentication/login';
     String response = await Service.request(url, body);
 
@@ -35,7 +39,7 @@ class AuthenticationService extends AuthServices {
     String status = responseUser['status'];
 
     if (status == "failed") {
-      return null;
+      return AuthException(message: responseUser["message"]);
     }
 
     return User.fromJson(responseUser['data']['user']);
@@ -57,8 +61,8 @@ class AuthenticationService extends AuthServices {
   }
 }
 
-class AuthException implements Exception {
-  final String message;
+// class AuthException implements Exception {
+//   final String message;
 
-  AuthException({this.message = 'Unknown error occurred. '});
-}
+//   AuthException({this.message = 'Unknown error occurred. '});
+// }

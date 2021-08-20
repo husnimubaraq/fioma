@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:fioma/classes/services/auth_services.dart';
+import 'package:fioma/classes/services/service.dart';
 import 'package:fioma/classes/shared/shared_pref.dart';
 import 'package:fioma/controllers/auth_state.dart';
 import 'package:fioma/models/user.dart';
@@ -21,11 +22,18 @@ class AuthController extends GetxController {
     super.onInit();
   }
 
-  Future<void> requestLogin(Map<String, String> body) async {
-    final user = await _authServices.requestLogin(body);
-    _authStateStream.value = Authenticated(user: user);
+  Future<dynamic> requestLogin(Map<String, String> body) async {
+    var response = await _authServices.requestLogin(body);
+    if (response is AuthException) {
+      return response;
+    } else {
+      final user = response;
+      _authStateStream.value = Authenticated(user: user);
 
-    SharedPref.saveUser(user);
+      SharedPref.saveUser(user);
+
+      return user;
+    }
   }
 
   void requestLogout() async {
@@ -58,9 +66,9 @@ class AuthController extends GetxController {
 
     _authStateStream.value = AuthLoading();
 
-    final users = await _authServices.getCurrentUser(body);
+    var response = await _authServices.getCurrentUser(body);
 
-    if (users == null) {
+    if (response is AuthException) {
       _authStateStream.value = UnAuth();
     } else {
       _authStateStream.value = Authenticated(user: user);

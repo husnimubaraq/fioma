@@ -1,11 +1,17 @@
 part of 'widget.dart';
 
 class KabelFoCard extends StatelessWidget {
+  final KabelFO kabelFO;
+
+  KabelFoCard(this.kabelFO);
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Get.to(KabelFoDetail());
+        Get.to(KabelFoDetail(
+          kabelFO: kabelFO,
+        ));
       },
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -50,7 +56,7 @@ class KabelFoCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text("Magelang - Metroyudan",
+                  Text(kabelFO.name,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: Themes.blackTextStyle.copyWith(
@@ -62,14 +68,14 @@ class KabelFoCard extends StatelessWidget {
                       style: Themes.blackTextStyle.copyWith(fontSize: 14),
                       children: [
                         TextSpan(
-                            text: ' MTD_MGL_1',
+                            text: ' ${kabelFO.ruas}',
                             style: Themes.blackTextStyle.copyWith(
                                 fontSize: 14,
                                 color: Themes.infoColor,
                                 fontWeight: Themes.boldFontWeight))
                       ])),
                   Text(
-                    "Regional 4 / Magelang",
+                    "${kabelFO.regionalName} / ${kabelFO.arnetName}",
                     style: Themes.greyTextStyle.copyWith(
                       fontSize: Themes.lightFontSize,
                       fontWeight: Themes.regularFontWeight,

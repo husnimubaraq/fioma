@@ -1,6 +1,7 @@
 part of 'pages.dart';
 
 class HomePage extends StatelessWidget {
+  final _controller = Get.put(HomeController());
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -21,7 +22,7 @@ class HomePage extends StatelessWidget {
                     style: Themes.greyTextStyle,
                   ),
                   Text(
-                    'Admin FIOMA',
+                    _controller.user.position,
                     style: Themes.blackTextStyle,
                   ),
                 ],
@@ -43,7 +44,7 @@ class HomePage extends StatelessWidget {
                         style: Themes.greyTextStyle,
                       ),
                       Text(
-                        'Regional 4',
+                        _controller.user.regionalName,
                         style: Themes.blackTextStyle,
                       ),
                     ],
@@ -56,7 +57,7 @@ class HomePage extends StatelessWidget {
                         style: Themes.greyTextStyle,
                       ),
                       Text(
-                        'Magelang',
+                        _controller.user.arnetName,
                         style: Themes.blackTextStyle,
                       ),
                     ],
@@ -112,7 +113,7 @@ class HomePage extends StatelessWidget {
               width:
                   MediaQuery.of(context).size.width - 2 * Themes.defaultMargin,
               child: Text(
-                "Hai, Joseph Carlo!",
+                "Hai, ${_controller.user.name}",
                 style: Themes.headerTextStyle,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,

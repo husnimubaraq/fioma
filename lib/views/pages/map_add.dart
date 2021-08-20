@@ -2,29 +2,32 @@ part of 'pages.dart';
 
 class MapAdd extends StatelessWidget {
   final String dataPath;
+  final int id;
 
-  MapAdd({Key key, this.dataPath}) : super(key: key);
+  MapAdd({Key key, this.dataPath, this.id}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: SafeArea(
-      child: _MapAdd(dataPath),
+      child: _MapAdd(dataPath, id),
     ));
   }
 }
 
 class _MapAdd extends StatefulWidget {
   final String dataPath;
+  final int id;
 
-  _MapAdd(this.dataPath);
+  _MapAdd(this.dataPath, this.id);
 
   @override
   _MapAddState createState() => _MapAddState();
 }
 
 class _MapAddState extends State<_MapAdd> {
-  final _controller = Get.put(MapAddController());
+  final MapAddController _controller =
+      Get.put(MapAddController(Get.put(KabelFoServices())));
   GoogleMapController controller;
 
   Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
@@ -175,7 +178,9 @@ class _MapAddState extends State<_MapAdd> {
             height: 45,
             padding: EdgeInsets.symmetric(horizontal: Themes.defaultMargin),
             child: RaisedButton(
-              onPressed: () async {},
+              onPressed: () async {
+                _onSave();
+              },
               elevation: 0,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8)),
@@ -244,5 +249,18 @@ class _MapAddState extends State<_MapAdd> {
         markers.remove(markerId);
       }
     });
+  }
+
+  void _onSave() {
+    List<String> pathInfo = [];
+    int id = widget.id;
+
+    for (var kv in markers.entries) {
+      pathInfo.add(kv.value.position.latitude.toString() +
+          ", " +
+          kv.value.position.longitude.toString());
+    }
+
+    _controller.updatePath(pathInfo, id);
   }
 }

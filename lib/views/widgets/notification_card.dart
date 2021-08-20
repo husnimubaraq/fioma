@@ -1,11 +1,18 @@
 part of 'widget.dart';
 
 class NotificationCard extends StatelessWidget {
+  ListElement notification;
+
+  NotificationCard({Key key, this.notification}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
+    // var data = jsonDecode(notification.data);
     return InkWell(
       onTap: () {
-        Get.to(NotificationDetailPage());
+        Get.to(NotificationDetailPage(
+          id: notification.id,
+        ));
       },
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -18,30 +25,28 @@ class NotificationCard extends StatelessWidget {
               MdiIcons.email,
               color: Themes.primaryColor,
             ),
-            SizedBox(
-              width: 20,
-            ),
             Container(
               width: (MediaQuery.of(context).size.width - 40) * 7 / 8,
+              padding: const EdgeInsets.only(left: 20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text("Pesan Berantai",
+                  Text(notification.title,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: Themes.blackTextStyle.copyWith(
-                          fontWeight: ("unread" == 'unread'
+                          fontWeight: (notification.data == null
                               ? Themes.boldFontWeight
                               : Themes.regularFontWeight))),
                   Text(
-                    "halo apa kaabar saya makan nasi dan ikan",
+                    notification.content ?? "",
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: Themes.blackTextStyle
                         .copyWith(fontSize: Themes.regularFontSize),
                   ),
                   Text(
-                    "CRITICAL",
+                    notification.category,
                     style: Themes.blackTextStyle.copyWith(
                         fontWeight: Themes.mediumFontWeight,
                         color: Themes.dangerColor),

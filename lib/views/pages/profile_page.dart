@@ -1,6 +1,7 @@
 part of 'pages.dart';
 
 class ProfilePage extends StatelessWidget {
+  final _controller = Get.put(ProfileController());
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -28,7 +29,7 @@ class ProfilePage extends StatelessWidget {
                 width: MediaQuery.of(context).size.width -
                     2 * Themes.defaultMargin,
                 child: Text(
-                  "Joseph Carlo",
+                  _controller.user.name,
                   maxLines: 2,
                   textAlign: TextAlign.center,
                   overflow: TextOverflow.clip,
@@ -40,7 +41,7 @@ class ProfilePage extends StatelessWidget {
                     2 * Themes.defaultMargin,
                 margin: EdgeInsets.only(top: 8, bottom: 30),
                 child: Text(
-                  'Admin FIOMA',
+                  _controller.user.position,
                   textAlign: TextAlign.center,
                   style: Themes.subTitleTextStyle,
                 ),
@@ -50,31 +51,28 @@ class ProfilePage extends StatelessWidget {
               ),
               ProfileItem(
                 label: 'Username',
-                value: 'josephcarlo',
+                value: _controller.user.username,
               ),
-              ProfileItem(
-                label: 'Phone',
-                value: '085696811483',
-              ),
+              ProfileItem(label: 'Phone', value: _controller.user.phone),
               ProfileItem(
                 label: 'Email',
-                value: 'elslaq.kho@gmail.com',
+                value: _controller.user.email,
               ),
               ProfileItem(
                 label: 'NIK',
-                value: '2113243535',
+                value: _controller.user.nik,
               ),
               ProfileItem(
                 label: 'Posisi',
-                value: 'OM Transport',
+                value: _controller.user.type,
               ),
               ProfileItem(
                 label: 'Regional',
-                value: 'Regional 4',
+                value: _controller.user.regionalName,
               ),
               ProfileItem(
                 label: 'Arnet',
-                value: 'Magelang',
+                value: _controller.user.arnetName,
                 isAddLineDivider: false,
               ),
               SizedBox(
@@ -86,7 +84,9 @@ class ProfilePage extends StatelessWidget {
                 height: 45,
                 padding: EdgeInsets.symmetric(horizontal: Themes.defaultMargin),
                 child: RaisedButton(
-                  onPressed: () async {},
+                  onPressed: () {
+                    _controller.logout();
+                  },
                   elevation: 0,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8)),

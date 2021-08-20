@@ -1,6 +1,11 @@
 part of 'pages.dart';
 
 class KabelFoList extends StatelessWidget {
+  final KabelFoController controller =
+      Get.put(KabelFoController(Get.put(KabelFoServices())));
+
+  final TextEditingController queryController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,6 +60,8 @@ class KabelFoList extends StatelessWidget {
                 borderRadius: BorderRadius.circular(8),
                 border: Border.all(color: Colors.black)),
             child: TextField(
+              controller: queryController,
+              onChanged: controller.onChangeText,
               decoration: InputDecoration(
                   border: InputBorder.none,
                   hintStyle: Themes.greyTextStyle,
@@ -64,35 +71,15 @@ class KabelFoList extends StatelessWidget {
           SizedBox(
             height: 20,
           ),
-          Expanded(
-            child: ListView(
-              children: [
-                KabelFoCard(),
-                KabelFoCard(),
-                KabelFoCard(),
-                KabelFoCard(),
-                KabelFoCard(),
-                KabelFoCard(),
-                KabelFoCard(),
-                KabelFoCard(),
-                KabelFoCard(),
-                KabelFoCard(),
-                KabelFoCard(),
-                KabelFoCard(),
-                KabelFoCard(),
-                KabelFoCard(),
-                KabelFoCard(),
-                KabelFoCard(),
-                KabelFoCard(),
-                KabelFoCard(),
-                KabelFoCard(),
-                KabelFoCard(),
-                KabelFoCard(),
-                KabelFoCard(),
-                KabelFoCard(),
-              ],
-            ),
-          )
+          Expanded(child: Obx(() {
+            return controller.isLoading.value == true
+                ? Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : ListView(
+                    children:
+                        controller.kabels.map((e) => KabelFoCard(e)).toList());
+          }))
         ],
       )),
     );

@@ -1,6 +1,9 @@
 import 'package:fioma/classes/services/auth_services.dart';
+import 'package:fioma/classes/services/service.dart';
 import 'package:fioma/controllers/auth_controller.dart';
+import 'package:fioma/controllers/auth_state.dart';
 import 'package:get/get.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'login_state.dart';
 
 class LoginController extends GetxController {
@@ -14,7 +17,11 @@ class LoginController extends GetxController {
     _loginStateStream.value = LoginLoading();
 
     try {
-      await _authController.requestLogin(body);
+      var response = await _authController.requestLogin(body);
+      if (response is AuthException) {
+        Fluttertoast.showToast(
+            msg: response.message, gravity: ToastGravity.BOTTOM);
+      }
       _loginStateStream.value = LoginState();
     } on AuthException catch (e) {
       _loginStateStream.value = LoginFailure(error: e.message);
